@@ -3,7 +3,6 @@ using UnityEngine;
 
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
-
     [SerializeField] private GameObject targetGround = null;
     [SerializeField] private bool enableBrush = false;
 
@@ -23,7 +22,8 @@ public class PrefabBrush : MonoBehaviour {
 
     private void OnScene(SceneView scene) {
         if (!enableBrush) return;
-        if (Event.current.keyCode == KeyCode.Q) {
+        Tools.current = Tool.None;
+        if (Event.current.type == EventType.MouseDown && Event.current.button == 0) {
             Vector3 mousePosition = Event.current.mousePosition;
             float ppp = EditorGUIUtility.pixelsPerPoint;
             mousePosition.y = scene.camera.pixelHeight - mousePosition.y * ppp;
