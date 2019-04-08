@@ -1,13 +1,14 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
-    [SerializeField] private GameObject targetGround = null;
-    [SerializeField] private bool enableBrush = false;
-
+     public GameObject targetGround = null;
+    [HideInInspector] public bool enableBrush = false;
+    [HideInInspector] public List<GameObject> meshList;
     private GameObject parent = null;
-
+ 
     private void OnEnable() {
         if (!Application.isEditor) {
             Destroy(this);
@@ -18,7 +19,9 @@ public class PrefabBrush : MonoBehaviour {
 
     private void OnDisable() {
         SceneView.onSceneGUIDelegate -= OnScene;
+      
     }
+
 
     private void OnScene(SceneView scene) {
         if (!enableBrush) return;
@@ -41,4 +44,11 @@ public class PrefabBrush : MonoBehaviour {
             }
         }
     }
+
+
+    public void AddMesh(GameObject mesh)
+    {
+        meshList.Add(mesh);
+    }
+
 }
