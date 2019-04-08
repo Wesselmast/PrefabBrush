@@ -46,6 +46,7 @@ public class PrefabBrush : MonoBehaviour {
         float ppp = EditorGUIUtility.pixelsPerPoint;
         mousePosition.y = scene.camera.pixelHeight - mousePosition.y * ppp;
         mousePosition.x *= ppp;
+
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
             if (hit.collider.gameObject != targetGround) return;
             if (parent == null) parent = new GameObject("BrushedItems");
