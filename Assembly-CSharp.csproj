@@ -64,6 +64,7 @@
     <Compile Include="Assets\Placement\Decall.cs" />
     <Compile Include="Assets\Placement\DPlacement.cs" />
     <Compile Include="Assets\Placement\DPlacementGUI.cs" />
+    <Compile Include="Assets\Scripts\ExtensionMethods.cs" />
     <Compile Include="Assets\Scripts\IconCreater.cs" />
     <Compile Include="Assets\Scripts\PrefabBrush.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
