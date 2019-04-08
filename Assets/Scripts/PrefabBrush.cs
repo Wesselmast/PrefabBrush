@@ -65,18 +65,13 @@ public class PrefabBrush : MonoBehaviour {
                     GameObject prefab = (GameObject)Resources.Load("Example", typeof(GameObject));
                     GameObject prefabInstance = ((GameObject)PrefabUtility.InstantiatePrefab(prefab));
 
-                    float randomNum = Random.Range(0f, 1f);
-                    float circumfrence = randomNum * 2 * Mathf.PI;
-                    float radius = brushSize * Mathf.Sqrt(randomNum);
-                    float randomX = hitPoint.x + radius * Mathf.Cos(circumfrence);
-                    float randomY = hitPoint.z + radius * Mathf.Sin(circumfrence);
-                    Vector3 randomPosition = new Vector3(randomX, 0, randomY);
+                    Vector3 randomPosition = hitPoint + Random.insideUnitSphere * brushSize;
                     randomPosition = randomPosition.SetY(Terrain.activeTerrain.SampleHeight(randomPosition) + prefabInstance.transform.position.y);
 
                     prefabInstance.transform.position = randomPosition;
                     prefabInstance.transform.eulerAngles = prefabInstance.transform.eulerAngles.SetY(Random.Range(0, 360));
 
-                    prefabInstance.transform.localScale *= randomNum * scaleFactor;
+                    prefabInstance.transform.localScale *= Random.Range(0f, 1f) * scaleFactor;
                     prefabInstance.transform.parent = parent.transform;
                 }
                 elapsed = 0;
