@@ -83,12 +83,12 @@ public class PrefabBrush : MonoBehaviour {
                     prefabInstance.transform.parent = parent.transform;
 
                     foreach (GameObject go in meshCollection) {
-                        if (prefabInstance == null) break;
                         if (Vector3.Distance(go.transform.position, prefabInstance.transform.position) < minimumDistance) {
                             DestroyImmediate(prefabInstance);
+                            break;
                         }
                     }
-                    if(prefabInstance != null) meshCollection.Add(prefabInstance);
+                    if (prefabInstance != null) meshCollection.Add(prefabInstance);
                 }
                 elapsed = 0;
             }
