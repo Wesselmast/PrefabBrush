@@ -71,7 +71,7 @@ public class PrefabBrush : MonoBehaviour {
                     prefabInstance.transform.position = randomPosition;
                     prefabInstance.transform.eulerAngles = prefabInstance.transform.eulerAngles.SetY(Random.Range(0, 360));
 
-                    prefabInstance.transform.localScale *= Random.Range(0f, 1f) * scaleFactor;
+                    prefabInstance.transform.localScale *= Random.Range(.5f, 1.5f) * scaleFactor;
                     prefabInstance.transform.parent = parent.transform;
                 }
                 elapsed = 0;
