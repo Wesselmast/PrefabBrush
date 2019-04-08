@@ -27,7 +27,6 @@ public class PrefabBrush : MonoBehaviour {
             Destroy(this);
         }
         enableBrush = false;
-        meshCollection = new List<GameObject>();
         SceneView.onSceneGUIDelegate += OnScene;
     }
 
@@ -61,12 +60,13 @@ public class PrefabBrush : MonoBehaviour {
             if (hit.collider.gameObject != targetGround) return;
             if (parent == null) {
                 parent = new GameObject("BrushedItems");
+                elapsed = float.MaxValue;
                 meshCollection = new List<GameObject>();
             }
 
             hitPoint = hit.point;
 
-            if (elapsed < spawnDelay) {
+            if (elapsed < spawnDelay && e.type == EventType.MouseDrag) {
                 elapsed += Time.deltaTime;
             }
             else {

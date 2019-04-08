@@ -227,7 +227,7 @@ MonoBehaviour:
   brushSize: 15
   minimumDistance: 0.8
   scaleFactor: 1
-  spawnDelay: 1
+  spawnDelay: 10
   prefabDensity: 13
   prefabs:
   - {fileID: 837890639906767640, guid: aeed7050a1275024aba1cdf768705e04, type: 3}
