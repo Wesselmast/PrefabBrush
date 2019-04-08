@@ -5,14 +5,19 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
     [SerializeField] private float brushSize = 5f;
+    [SerializeField] private float minimumDistance = 1f;
     [SerializeField] private float scaleFactor = 1.5f;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private int prefabDensity = 3;
 
+    [SerializeField] private GameObject[] prefabs = null;
+
     public GameObject targetGround = null;
     [HideInInspector] public bool enableBrush = false;
-    [HideInInspector] public List<GameObject> meshList;
+    [HideInInspector] public List<GameObject> meshList = new List<GameObject>();
     private GameObject parent = null;
+
+    private List<GameObject> meshCollection;
 
     private Vector3 hitPoint = Vector3.zero;
     private float elapsed = 0;
@@ -22,6 +27,7 @@ public class PrefabBrush : MonoBehaviour {
             Destroy(this);
         }
         enableBrush = false;
+        meshCollection = new List<GameObject>();
         SceneView.onSceneGUIDelegate += OnScene;
     }
 
@@ -53,7 +59,10 @@ public class PrefabBrush : MonoBehaviour {
 
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
             if (hit.collider.gameObject != targetGround) return;
-            if (parent == null) parent = new GameObject("BrushedItems");
+            if (parent == null) {
+                parent = new GameObject("BrushedItems");
+                meshCollection = new List<GameObject>();
+            }
 
             hitPoint = hit.point;
 
@@ -62,8 +71,7 @@ public class PrefabBrush : MonoBehaviour {
             }
             else {
                 for (int i = 0; i < prefabDensity; i++) {
-                    GameObject prefab = (GameObject)Resources.Load("Example", typeof(GameObject));
-                    GameObject prefabInstance = ((GameObject)PrefabUtility.InstantiatePrefab(prefab));
+                    GameObject prefabInstance = Instantiate(prefabs[Random.Range(0, prefabs.Length)]);
 
                     Vector3 randomPosition = hitPoint + Random.insideUnitSphere * brushSize;
                     randomPosition = randomPosition.SetY(Terrain.activeTerrain.SampleHeight(randomPosition) + prefabInstance.transform.position.y);
@@ -73,6 +81,14 @@ public class PrefabBrush : MonoBehaviour {
 
                     prefabInstance.transform.localScale *= Random.Range(.5f, 1.5f) * scaleFactor;
                     prefabInstance.transform.parent = parent.transform;
+
+                    foreach (GameObject go in meshCollection) {
+                        if (prefabInstance == null) break;
+                        if (Vector3.Distance(go.transform.position, prefabInstance.transform.position) < minimumDistance) {
+                            DestroyImmediate(prefabInstance);
+                        }
+                    }
+                    if(prefabInstance != null) meshCollection.Add(prefabInstance);
                 }
                 elapsed = 0;
             }

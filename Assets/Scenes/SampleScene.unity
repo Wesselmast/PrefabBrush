@@ -224,12 +224,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0af1e2036f1324995cf4196118c88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brushSize: 20
+  brushSize: 15
+  minimumDistance: 0.8
   scaleFactor: 1
-  spawnDelay: 2
-  prefabDensity: 612
+  spawnDelay: 1
+  prefabDensity: 13
+  prefabs:
+  - {fileID: 837890639906767640, guid: aeed7050a1275024aba1cdf768705e04, type: 3}
+  - {fileID: 2921833201675971789, guid: 464b562f8a0d3f24da7b37fecb377ad8, type: 3}
   targetGround: {fileID: 1392751546}
-  enableBrush: 0
+  enableBrush: 1
   meshList:
   - {fileID: 0}
 --- !u!1 &534669902
