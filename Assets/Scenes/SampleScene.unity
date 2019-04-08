@@ -225,8 +225,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   brushSize: 3.05
+  scaleFactor: 1.5
+  prefabDensity: 3
   targetGround: {fileID: 1392751546}
-  enableBrush: 0
+  enableBrush: 1
   meshList:
   - {fileID: 0}
 --- !u!1 &534669902

@@ -5,6 +5,8 @@ using UnityEngine;
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
     [SerializeField] private float brushSize = 5f;
+    [SerializeField] private float scaleFactor = 1.5f;
+    [SerializeField] private int prefabDensity = 3;
 
     public GameObject targetGround = null;
     [HideInInspector] public bool enableBrush = false;
@@ -12,6 +14,7 @@ public class PrefabBrush : MonoBehaviour {
     private GameObject parent = null;
 
     private Vector3 hitPoint = Vector3.zero;
+    private float elapsed = 0;
 
     private void OnEnable() {
         if (!Application.isEditor) {
@@ -42,6 +45,11 @@ public class PrefabBrush : MonoBehaviour {
 
         if (!((e.type == EventType.MouseDown || e.type == EventType.MouseDrag) && e.button == 0)) return;
 
+        if (elapsed < .2f) {
+            elapsed += Time.deltaTime;
+            return;
+        }
+
         Vector3 mousePosition = e.mousePosition;
         float ppp = EditorGUIUtility.pixelsPerPoint;
         mousePosition.y = scene.camera.pixelHeight - mousePosition.y * ppp;
@@ -50,23 +58,29 @@ public class PrefabBrush : MonoBehaviour {
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
             if (hit.collider.gameObject != targetGround) return;
             if (parent == null) parent = new GameObject("BrushedItems");
-            GameObject prefab = (GameObject)Resources.Load("Example", typeof(GameObject));
-            GameObject prefabInstance = ((GameObject)PrefabUtility.InstantiatePrefab(prefab));
 
-            hitPoint = hit.point.SetY(hit.point.y + prefabInstance.transform.position.y);
+            for (int i = 0; i < prefabDensity; i++) {
+                GameObject prefab = (GameObject)Resources.Load("Example", typeof(GameObject));
+                GameObject prefabInstance = ((GameObject)PrefabUtility.InstantiatePrefab(prefab));
 
-            float randomNum = Random.Range(0f, 1f); 
-            float circumfrence = randomNum * 2 * Mathf.PI;
-            float radius = brushSize * Mathf.Sqrt(randomNum);
-            float randomX = hitPoint.x + radius * Mathf.Cos(circumfrence);
-            float randomY = hitPoint.z + radius * Mathf.Sin(circumfrence);
-            Vector3 randomPosition = new Vector3(randomX, 0, randomY);
-            randomPosition = randomPosition.SetY(Terrain.activeTerrain.SampleHeight(randomPosition) + prefabInstance.transform.position.y);
+                hitPoint = hit.point.SetY(hit.point.y + prefabInstance.transform.position.y);
 
-            prefabInstance.transform.position = randomPosition;
-            prefabInstance.transform.eulerAngles = prefabInstance.transform.eulerAngles.SetY(Random.Range(0, 360));
-            prefabInstance.transform.parent = parent.transform;
+                float randomNum = Random.Range(0f, 1f);
+                float circumfrence = randomNum * 2 * Mathf.PI;
+                float radius = brushSize * Mathf.Sqrt(randomNum);
+                float randomX = hitPoint.x + radius * Mathf.Cos(circumfrence);
+                float randomY = hitPoint.z + radius * Mathf.Sin(circumfrence);
+                Vector3 randomPosition = new Vector3(randomX, 0, randomY);
+                randomPosition = randomPosition.SetY(Terrain.activeTerrain.SampleHeight(randomPosition) + prefabInstance.transform.position.y);
+
+                prefabInstance.transform.position = randomPosition;
+                prefabInstance.transform.eulerAngles = prefabInstance.transform.eulerAngles.SetY(Random.Range(0, 360));
+
+                prefabInstance.transform.localScale *= randomNum * scaleFactor;
+                prefabInstance.transform.parent = parent.transform;
+            }
         }
+        elapsed = 0;
         Event.current.Use();
     }
 
