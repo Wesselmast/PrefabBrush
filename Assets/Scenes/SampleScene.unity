@@ -226,6 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   brushSize: 3.05
   scaleFactor: 1.5
+  spawnDelay: 1
   prefabDensity: 3
   targetGround: {fileID: 1392751546}
   enableBrush: 1
