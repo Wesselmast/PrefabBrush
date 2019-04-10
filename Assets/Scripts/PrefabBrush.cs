@@ -45,6 +45,12 @@ public class PrefabBrush : MonoBehaviour {
             else Debug.Log("Brush mode off");
         }
 
+        if (e.GetTypeForControl(controlID) == EventType.KeyDown && e.keyCode == KeyCode.E && enableBrush) {
+            eraserOn = !eraserOn;
+            if (enableBrush) Debug.Log("Eraser mode on");
+            else Debug.Log("Eraser mode off");
+        }
+
         if (!enableBrush) return;
 
         HandleUtility.AddDefaultControl(controlID);

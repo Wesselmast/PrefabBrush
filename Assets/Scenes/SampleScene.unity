@@ -229,7 +229,7 @@ MonoBehaviour:
   scaleFactor: 0.75
   spawnDelay: 1
   prefabDensity: 15
-  eraserOn: 1
+  eraserOn: 0
   prefabs:
   - {fileID: 837890639906767640, guid: aeed7050a1275024aba1cdf768705e04, type: 3}
   targetGround: {fileID: 1392751546}
