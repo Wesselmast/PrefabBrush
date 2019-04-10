@@ -9,6 +9,7 @@ public class PrefabBrush : MonoBehaviour {
     [SerializeField] private float scaleFactor = 1.5f;
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private int prefabDensity = 3;
+    [SerializeField] private bool eraserOn = false;
 
     [SerializeField] private GameObject[] prefabs = null;
 
@@ -58,14 +59,25 @@ public class PrefabBrush : MonoBehaviour {
 
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
             if (hit.collider.gameObject != targetGround) return;
+
+            hitPoint = hit.point;
+
+            if(eraserOn) {
+                foreach (GameObject go in meshCollection.ToArray()) {
+                    if (Vector3.Distance(go.transform.position, hitPoint) <= brushSize) {
+                        meshCollection.Remove(go);
+                        DestroyImmediate(go);
+                    }
+                }
+                Event.current.Use();
+                return;
+            }
+
             if (parent == null) {
                 parent = new GameObject("BrushedItems");
                 elapsed = float.MaxValue;
                 meshCollection = new List<GameObject>();
             }
-
-            hitPoint = hit.point;
-
             if (elapsed < spawnDelay && e.type == EventType.MouseDrag) {
                 elapsed += Time.deltaTime;
             }
