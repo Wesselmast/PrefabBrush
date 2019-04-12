@@ -224,14 +224,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0af1e2036f1324995cf4196118c88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brushSize: 15
-  minimumDistance: 2
-  scale: {x: 0.5, y: 1.5}
+  brushSize: 12
+  minimumDistance: 1
+  scale: {x: 0.75, y: 1.25}
   spawnDelay: 1
   prefabDensity: 15
-  eraserOn: 1
+  eraserOn: 0
   prefabs:
   - {fileID: 837890639906767640, guid: aeed7050a1275024aba1cdf768705e04, type: 3}
+  - {fileID: 1998669512614996213, guid: c52ebc3bd7071034294bac24a716bdee, type: 3}
+  - {fileID: 2921833201675971789, guid: 464b562f8a0d3f24da7b37fecb377ad8, type: 3}
   targetGround: {fileID: 1392751546}
   enableBrush: 0
 --- !u!1 &534669902
@@ -359,7 +361,7 @@ Terrain:
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
-  m_DetailObjectDistance: 80
+  m_DetailObjectDistance: 63
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
