@@ -66,6 +66,7 @@
     <Compile Include="Assets\Scripts\Outdated\DPlacement.cs" />
     <Compile Include="Assets\Scripts\Outdated\DPlacementGUI.cs" />
     <Compile Include="Assets\Scripts\PrefabBrush.cs" />
+    <Compile Include="Assets\Scripts\PrefabBrushSavefile.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/Wessel/Desktop/GithubSchool/PrefabBrush/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
