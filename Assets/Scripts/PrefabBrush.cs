@@ -5,6 +5,8 @@ using System.Linq;
 
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
+    [HideInInspector] public bool enableBrush = false;
+
     [SerializeField] private float brushSize = 5f;
     [SerializeField] private float minimumDistance = 1f;
     [SerializeField] private Vector2 scale = new Vector2(.5f, 1.5f);
@@ -12,15 +14,9 @@ public class PrefabBrush : MonoBehaviour {
     [SerializeField] private int prefabDensity = 3;
     [SerializeField] [Range(0, 1)] private float maxSlopeRange = .9f;
     [SerializeField] private bool eraserOn = false;
-
     [SerializeField] private GameObject[] prefabs = null;
 
-    [HideInInspector] public bool enableBrush = false;
-    private GameObject parent = null;
-
-    [SerializeField] private PrefabBrushSavefile saveFile = null;
-
-    private Vector3 hitPoint = Vector3.zero;
+    private List<GameObject> meshCollection;
     private float elapsed = 0;
     private Terrain[] terrains = null;
 
@@ -31,6 +27,14 @@ public class PrefabBrush : MonoBehaviour {
         enableBrush = false;
         eraserOn = false;
         terrains = FindObjectsOfType<Terrain>();
+
+        meshCollection = GetComponentsInChildren<Transform>()
+            .Select(t => t.gameObject)
+            .Where(go => go != gameObject)
+            .ToList();
+        if(!meshCollection.Any()) {
+            meshCollection = new List<GameObject>();
+        }
         SceneView.onSceneGUIDelegate += OnScene;
     }
 
@@ -68,7 +72,9 @@ public class PrefabBrush : MonoBehaviour {
         mousePosition.x *= ppp;
 
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
-            hitPoint = hit.point;
+            if (eraserOn) Handles.color = new Color(255, 0, 0, .3f);
+            else Handles.color = new Color(200, 200, 200, .3f);
+            Handles.DrawSolidArc(hit.point, Vector3.up, Vector3.one * 0.001f, 360, brushSize);
 
             Terrain terrain = null;
             for (int i = 0; i < terrains.Length; i++) {
@@ -84,21 +90,18 @@ public class PrefabBrush : MonoBehaviour {
                 return;
             }
 
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+
             if (eraserOn) {
-                foreach (GameObject go in saveFile.MeshCollection.ToArray()) {
-                    if (Vector3.Distance(go.transform.position, hitPoint) <= brushSize) {
-                        saveFile.MeshCollection.Remove(go);
+                foreach (GameObject go in meshCollection.ToArray()) {
+                    if (Vector3.Distance(go.transform.position, hit.point) <= brushSize) {
+                        meshCollection.Remove(go);
                         DestroyImmediate(go);
                     }
                 }
                 return;
             }
 
-            if (parent == null) {
-                parent = new GameObject("BrushedItems");
-                elapsed = float.MaxValue;
-                saveFile.MeshCollection = new List<GameObject>();
-            }
             if (elapsed < spawnDelay && e.type == EventType.MouseDrag) {
                 elapsed += Time.deltaTime;
                 return;
@@ -107,18 +110,18 @@ public class PrefabBrush : MonoBehaviour {
             for (int i = 0; i < prefabDensity; i++) {
                 int randomPrefab = Random.Range(0, prefabs.Length);
 
-                Vector3 randomPosition = hitPoint + Random.insideUnitSphere * brushSize;
+                Vector3 randomPosition = hit.point + Random.insideUnitSphere * brushSize;
                 randomPosition = randomPosition.SetY(terrain.SampleHeight(randomPosition) + prefabs[randomPrefab].transform.position.y);
 
                 Vector3 terrainSize = terrain.terrainData.size;
                 float posX = -(terrain.GetPosition().x / terrainSize.x);
                 float posZ = -(terrain.GetPosition().z / terrainSize.z);
-                float yNormal = terrain.terrainData.GetInterpolatedNormal(posX + (randomPosition.x / terrainSize.x), posZ + (randomPosition.z / terrainSize.z)).y;
-                if (yNormal < maxSlopeRange) {
+                Vector3 normal = terrain.terrainData.GetInterpolatedNormal(posX + (randomPosition.x / terrainSize.x), posZ + (randomPosition.z / terrainSize.z));
+                if (normal.y < maxSlopeRange) {
                     continue;
                 }
                 bool tooClose = false;
-                foreach (GameObject go in saveFile.MeshCollection) {
+                foreach (GameObject go in meshCollection) {
                     if (Vector3.Distance(go.transform.position, randomPosition) < minimumDistance) {
                         tooClose = true;
                     }
@@ -126,20 +129,14 @@ public class PrefabBrush : MonoBehaviour {
                 if (tooClose) continue;
 
                 GameObject finalInstance = Instantiate(prefabs[randomPrefab]);
-                finalInstance.transform.parent = parent.transform;
+                finalInstance.hideFlags = HideFlags.HideInHierarchy;
+                finalInstance.transform.parent = transform;
                 finalInstance.transform.position = randomPosition;
                 finalInstance.transform.eulerAngles = finalInstance.transform.eulerAngles.SetY(Random.Range(0, 360));
                 finalInstance.transform.localScale *= Random.Range(scale.x, scale.y);
-                saveFile.MeshCollection.Add(finalInstance);
+                meshCollection.Add(finalInstance);
             }
             elapsed = 0;
         }
-    }
-
-    private void OnDrawGizmos() {
-        if (!enableBrush) return;
-        if (eraserOn) Gizmos.color = Color.red;
-        else Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(hitPoint, brushSize);
     }
 }
