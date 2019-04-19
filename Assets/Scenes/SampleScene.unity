@@ -224,8 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed0af1e2036f1324995cf4196118c88a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableBrush: 0
-  brushSize: 84.899994
+  enableBrush: 1
+  brushSize: 142.90002
   minimumDistance: 6
   scale: {x: 5, y: 6}
   spawnDelay: 1
@@ -233,8 +233,10 @@ MonoBehaviour:
   maxSlopeRange: 0.9
   eraserOn: 1
   prefabs:
-  - {fileID: 8536468721508859989, guid: e7dc44ee6ab80cc49b7e919674b682c3, type: 3}
-  - {fileID: 4849018895612587141, guid: d30c34a04138a4946aa92b71cc390143, type: 3}
+  - {fileID: 7349165186717636670, guid: eb3830507c4ab5d44aef6bb8570a014b, type: 3}
+  - {fileID: 3298614534983578096, guid: 72c435f5ef8bb114b95a0f65c5b1cd3a, type: 3}
+  - {fileID: 4153663781510941334, guid: f6d42c80f17b787458652d848473ef00, type: 3}
+  - {fileID: 8358246385316086255, guid: f8ab1b35027f2d14b957fa0ccc1fa262, type: 3}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0

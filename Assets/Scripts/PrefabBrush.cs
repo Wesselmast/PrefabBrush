@@ -72,8 +72,8 @@ public class PrefabBrush : MonoBehaviour {
         mousePosition.x *= ppp;
 
         if (Physics.Raycast(scene.camera.ScreenPointToRay(mousePosition), out RaycastHit hit)) {
-            if (eraserOn) Handles.color = new Color(255, 0, 0, .3f);
-            else Handles.color = new Color(200, 200, 200, .3f);
+            if (eraserOn) Handles.color = new Color(1.0f, .1f, .1f, .3f);
+            else Handles.color = new Color(.9f, .9f, .9f, .3f);
             Handles.DrawSolidArc(hit.point, Vector3.up, Vector3.one * 0.001f, 360, brushSize);
 
             Terrain terrain = null;
@@ -90,7 +90,7 @@ public class PrefabBrush : MonoBehaviour {
                 return;
             }
 
-            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene());
+            UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
 
             if (eraserOn) {
                 foreach (GameObject go in meshCollection.ToArray()) {
