@@ -5,7 +5,8 @@ using System.Linq;
 
 [ExecuteInEditMode]
 public class PrefabBrush : MonoBehaviour {
-    [HideInInspector] public bool enableBrush = false;
+    [SerializeField] private bool enableBrush = false;
+    [SerializeField] private bool eraserOn = false;
 
     [SerializeField] private float brushSize = 5f;
     [SerializeField] private float minimumDistance = 1f;
@@ -13,7 +14,6 @@ public class PrefabBrush : MonoBehaviour {
     [SerializeField] private float spawnDelay = 1f;
     [SerializeField] private int prefabDensity = 3;
     [SerializeField] [Range(0, 1)] private float maxSlopeRange = .9f;
-    [SerializeField] private bool eraserOn = false;
     [SerializeField] private GameObject[] prefabs = null;
 
     private List<GameObject> meshCollection;
