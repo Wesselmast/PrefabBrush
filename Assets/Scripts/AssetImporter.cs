@@ -51,7 +51,7 @@ public class AssetImporter : AssetPostprocessor {
                     "No")) {
                     instance.isStatic = true;
                 }
-                PrefabUtility.SaveAsPrefabAsset(instance, "Assets/Resources/Prefabs/" + gameObject.name + ".prefab");
+                PrefabUtility.SaveAsPrefabAsset(instance, "Assets/Resources/Prefabs/" + gameObject.name + "_prefab.prefab");
                 GameObject.DestroyImmediate(instance);
             }
         }
